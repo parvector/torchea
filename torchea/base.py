@@ -20,6 +20,7 @@ class BaseIndvdl(nn.ModuleList):
         else: 
             self.name = str(name)
         self.birthtime = birthtime
+        self.eval:tuple = (None,)
 
     def freeze_module(self, module):
         for parameter in list(module.parameters()):
