@@ -22,11 +22,11 @@ Translated with www.DeepL.com/Translator (free version)
 - Время прохода через нейронную сеть зависит от инженера. Инженер стремится усложнить модель, чтобы увеличить точность, но тогда увеличивается время прохода через нейронную сеть. Этот баланс очень сложно соблюсти прибегая лишь к умениям инженера.
 - Однокритериальное обучение. Модели нейронных сетей обучаются относительно одного критерия(функции ошибки), игнорируя другие необходимые критерии. При обучении инженеры используют метрики, но они позволяют лишь наблюдать за обучением, но не влияют на само обучение.
 
-The goal of this repository is to create tools and algorithms for automatic construction of artificial neural networks based on evolutionary algorithms. Evolutionary algorithms do not require differentiable functions, are able to find the right combination well, the selection of weights and architecture can be represented as a combinatorial problem, and have the ability to use more than one criterion for their work. This repository is built on pytorch and has all its advantages (rest in peace, tensorflow).
+The goal of this repository is to create tools and algorithms for automatic construction of artificial neural networks based on evolutionary algorithms. Evolutionary algorithms do not require differentiable functions, are able to find the right combination well, the selection of weights and architecture can be represented as a combinatorial problem, and have the ability to use more than one criterion for their work. This repository is built on pytorch and has all its advantages.
 
 Translated with www.DeepL.com/Translator (free version)
 
-Целью данного репозитория является создание инструментов и алгоритмов для автоматического построения искуственных нейронных сетей на основе эволюционных алгоритмов. Эволюционные алгоритмы не требуют дифференцируемых функций, способны хорошо находить нужную комбинацию, подбор весов и архитектуры можно представить как комбинаторную задачу, и имеют возможность использовать более одного критерия для своей работы. Этот репозиторий построен на pytorch и имеет все его преимущества (покойся с миром, tensorflow).
+Целью данного репозитория является создание инструментов и алгоритмов для автоматического построения искуственных нейронных сетей на основе эволюционных алгоритмов. Эволюционные алгоритмы не требуют дифференцируемых функций, способны хорошо находить нужную комбинацию, подбор весов и архитектуры можно представить как комбинаторную задачу, и имеют возможность использовать более одного критерия для своей работы. Этот репозиторий построен на pytorch и имеет все его преимущества.
 
 
 # About evolutionary algorithms
