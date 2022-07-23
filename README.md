@@ -5,17 +5,16 @@ Training and construction of torch models based on evolutionary algorithms
 
 # Introduction
 
-Neural networks have the form of a matrix, the values of which are represented as weights of synaptic connections and are subjected to operations. These weights are selected using the backward error propagation method. However, this concept has a number of limitations:
+Neural networks have the form of a matrix, the values of which are represented as weights of synaptic connections and are subjected to operations. These weights are selected using the error back propagation method. However, this concept has a number of limitations:
 - The backward error propagation method works only with differentiable activation functions.
-- The values of the weights can tend to zero, but never to be zero. This means that the weights become noise, which interferes with the operation of the neural network. Pruning was invented to solve this problem.
+- The values of the weights can tend to zero, but never to be zero. This means that the weights become noise that interferes with the neural network. Pruning was invented to solve this problem.
 - The need to find the right neural network architecture to solve the problem. Finding the right architecture involves trying a huge number of combinations and is limited by the mental capacity of machine learning engineers.
-- The time to traverse a neural network depends on the engineer. The engineer tends to make the model more complex in order to increase accuracy, but then the time to traverse the neural network increases. This balance is very difficult to maintain using only the skills of the engineer.
+- The time to traverse the neural network is up to the engineer. The engineer tends to make the model more complex in order to increase accuracy, but then the time to traverse the neural network increases. This balance is very difficult to maintain using only the skills of the engineer.
 - One-criteria learning. Neural network models are trained with respect to one criterion (error function), ignoring other necessary criteria. Engineers use metrics for training, but they allow only to observe the training, but do not affect the training itself.
-
 
 Translated with www.DeepL.com/Translator (free version)
 
-Нейронные сети имеют вид матрицы, значения которой представляются как веса синаптических связи и подвергаются операциям. Эти веса подбираются с помощью метода обратного распространения ошибки. Однако такая концепция имеет ряд ограничений:
+Нейронные сети имеют вид матрицы, значения которой представляются как веса синаптических связей и подвергаются операциям. Эти веса подбираются с помощью метода обратного распространения ошибки. Однако такая концепция имеет ряд ограничений:
 - Метод обратного распространения ошибки работает только с дифференцируемыми функциями активации.
 - Значения весов могут стремиться к нулю, но не когда не быть нулём. Это означает, что веса становятся шумами, которые мешают работе нейронной сети. Для решения этой проблемы был придуман прунинг.
 - Необходимость найти правильную архитектуру нейронной сети для решения задачи. Поиск правильной архитектуры подразумевает перебор огромного количества комбинаций и ограничен умственными способностями иженеров по машинному обучению.
@@ -43,8 +42,8 @@ Translated with www.DeepL.com/Translator (free version)
 
 Когда-то существовали только классические интерпретируемые методы машинного обучения, люди все понимали, но они плохо работали. Потом появились ансамблевые методы и искусственные нейронные сети, люди стали понимать их хуже, но они работали лучше. Никто не понимает как работают эволюционные алгоритмы, поэтому они должны работать еще лучше. :D
 
-Genetic algorithms and differential evolution are used for learning. To solve the problem, evolutionary algorithms manipulate the traits of individuals. The traits we will consider as activation functions, the presence of connections between neurons, and the weights of these connections.
+Genetic algorithms and differential evolution are used for learning. To solve the problem, evolutionary algorithms manipulate traits of individuals. We will think of the model as an individual, and we will think of the features as layers (we will also think of the activation functions as individual layers), the presence of connections between neurons (the value of the weight matrix can be zero), and the weights of these connections.
 
 Translated with www.DeepL.com/Translator (free version)
 
-Для обучения используется генетические алгоритмы и дифференциальная эволюция. Чтобы решить задачу, эволюционные алгоритмы манипулируют признаками особей. Признаками мы будет считать функции активации, наличие связи между нейронами и веса этих связей.
+Для обучения используется генетические алгоритмы и дифференциальная эволюция. Чтобы решить задачу, эволюционные алгоритмы манипулируют признаками особей. Особью мы будем считать модель, а признаками мы будет считать слои(функции активации тоже будем считать как отдельные слои), наличие связи между нейронами(значение матрицы весов может быть нулевым) и веса этих связей.
