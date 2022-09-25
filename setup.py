@@ -16,6 +16,4 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/parvector/torchea/issues",
     },
     packages=setuptools.find_packages(where="."), #
-    python_requires=">=3.9.5", 
-    install_requires = ["tqdm==4.64.0"]
 )
