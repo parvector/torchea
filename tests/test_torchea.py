@@ -11,12 +11,6 @@ class TestBase(unittest.TestCase):
         ti = BaseIndvdl()
         self.assertIsInstance(ti, BaseIndvdl)
 
-    def test_append(self):
-        ti = BaseIndvdl()
-        ti.append(nn.Linear(1,2))
-        isrequires_grad = list(ti.parameters())[0].requires_grad
-        self.assertFalse(isrequires_grad)
-        
     def test_insert(self):
         ti = BaseIndvdl()
         ti.append(nn.Linear(1,2))
@@ -25,12 +19,18 @@ class TestBase(unittest.TestCase):
         self.assertEqual(shape, (3,2))
         isrequires_grad = list(ti[0].parameters())[0].requires_grad
         self.assertFalse(isrequires_grad)
+        
+    def test_append(self):
+        ti = BaseIndvdl()
+        ti.append(nn.Linear(1,2))
+        isrequires_grad = list(ti.parameters())[0].requires_grad
+        self.assertFalse(isrequires_grad)
 
     def test_expend(self):
         ti = BaseIndvdl()
         ti.append(nn.Linear(1,2))
         ti.insert(0,nn.Linear(2,3))
-        ti.extend(nn.ModuleList([nn.Linear(3,4), nn.Linear(4,5)]))
+        ti.extend( [nn.Linear(3,4), nn.Linear(4,5)] )
         self.assertEqual(len(ti), 4)
         for i in range(2,4):
             isrequires_grad = list(ti[i].parameters())[0].requires_grad
@@ -51,58 +51,70 @@ class TestBase(unittest.TestCase):
         for params in ti.parameters():
             self.assertTrue((params.data == 0).all().item())
 
-    def test_get_len(self):
-        
+    def test_count_params(self):
         ti1 = BaseIndvdl()
         ti1.append(nn.Linear(2,2))
         ti1.append(nn.Linear(2,3))
         ti1.append(nn.Linear(3,2))
-        ti1_len = 23
-        self.assertEqual(ti1_len, ti1.get_len())
+        ti1_count_param = 23
+        self.assertEqual(ti1_count_param, ti1.count_params())
 
-    def test_get_val(self):
+    def test_getv(self):
         ti0 = BaseIndvdl()
         ti0.append(nn.Linear(2,2))
         ti0.append(nn.Linear(2,3))
         ti0.append(nn.Linear(3,2))
-        ti0.parameters_zero()
-        params = list(ti0.parameters())[2]
-        params.data[2,1] = 1
-        self.assertEqual(1, ti0.get_val(12))
-
-        with self.assertRaises(IndexError):
-            ti0.get_val(100)
-        with self.assertRaises(IndexError):
-            ti0.get_val(-1)
-
-        ti0 = BaseIndvdl()
-        ti0.append(nn.Linear(2,2))
-        ti0.parameters_zero()
         params = list(ti0.parameters())
+
+        with self.assertRaises(IndexError):
+            ti0.getv(100)
+        with self.assertRaises(IndexError):
+            ti0.getv(-1)
+
+        ti0.parameters_zero()
         params[0].data[0,0] = 1
-        self.assertEqual(1, ti0.get_val(0))
+        self.assertEqual(1, ti0.getv(0))
 
-        ti0 = BaseIndvdl()
-        ti0.append(nn.Linear(2,2))
         ti0.parameters_zero()
-        params = list(ti0.parameters())
-        params[1].data[1,1] = 1
-        print(params)
-        self.assertEqual(1, ti0.get_val(6))
+        params[1].data[0] = 1
+        self.assertEqual(1, ti0.getv(4))
+
+        ti0.parameters_zero()
+        params[1].data[1] = 1
+        self.assertEqual(1, ti0.getv(5))
+
+        ti0.parameters_zero()
+        params[2].data[2,1] = 1
+        self.assertEqual(1, ti0.getv(11))
 
 
-    def test_set_val(self):
+    def test_setv(self):
         ti = BaseIndvdl()
         ti.append(nn.Linear(2,2))
         ti.append(nn.Linear(2,3))
         ti.append(nn.Linear(3,2))
         ti.parameters_zero()
-        ti.set_val(12, 1)
-        self.assertEqual(1, ti.get_val(12))
+
         with self.assertRaises(IndexError):
-            ti.set_val(100, 1)
+            ti.setv(100, 1)
         with self.assertRaises(IndexError):
-            ti.set_val(-1, 1)
+            ti.setv(-1, 1)
+
+        ti.setv(0, 1)
+        self.assertEqual(1, ti.getv(0))
+        ti.parameters_zero()
+
+        ti.setv(4, 1)
+        self.assertEqual(1, ti.getv(4))
+        ti.parameters_zero()
+
+        ti.setv(5, 1)
+        self.assertEqual(1, ti.getv(5))
+        ti.parameters_zero()
+
+        ti.setv(11, 1)
+        self.assertEqual(1, ti.getv(11))
+        ti.parameters_zero()
 
 class TestCroses(unittest.TestCase):
     def test_crosDE(self):
