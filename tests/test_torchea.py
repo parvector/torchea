@@ -51,41 +51,50 @@ class TestBase(unittest.TestCase):
         for params in ti.parameters():
             self.assertTrue((params.data == 0).all().item())
 
+    def test_freeze_module(self):
+        ti = BaseIndvdl()
+        ti.append(nn.Linear(2,2))
+        ti.append(nn.Linear(2,3))
+        ti.append(nn.Linear(3,2))
+        for param in ti.parameters():
+            self.assertEqual(param.requires_grad, False)
+
+
     def test_count_params(self):
-        ti1 = BaseIndvdl()
-        ti1.append(nn.Linear(2,2))
-        ti1.append(nn.Linear(2,3))
-        ti1.append(nn.Linear(3,2))
-        ti1_count_param = 23
-        self.assertEqual(ti1_count_param, ti1.count_params())
+        ti = BaseIndvdl()
+        ti.append(nn.Linear(2,2))
+        ti.append(nn.Linear(2,3))
+        ti.append(nn.Linear(3,2))
+        ti_count_param = 23
+        self.assertEqual(ti_count_param, ti.count_params())
 
     def test_getv(self):
-        ti0 = BaseIndvdl()
-        ti0.append(nn.Linear(2,2))
-        ti0.append(nn.Linear(2,3))
-        ti0.append(nn.Linear(3,2))
-        params = list(ti0.parameters())
+        ti = BaseIndvdl()
+        ti.append(nn.Linear(2,2))
+        ti.append(nn.Linear(2,3))
+        ti.append(nn.Linear(3,2))
+        params = list(ti.parameters())
 
         with self.assertRaises(IndexError):
-            ti0.getv(100)
+            ti.getv(100)
         with self.assertRaises(IndexError):
-            ti0.getv(-1)
+            ti.getv(-1)
 
-        ti0.parameters_zero()
+        ti.parameters_zero()
         params[0].data[0,0] = 1
-        self.assertEqual(1, ti0.getv(0))
+        self.assertEqual(1, ti.getv(0))
 
-        ti0.parameters_zero()
+        ti.parameters_zero()
         params[1].data[0] = 1
-        self.assertEqual(1, ti0.getv(4))
+        self.assertEqual(1, ti.getv(4))
 
-        ti0.parameters_zero()
+        ti.parameters_zero()
         params[1].data[1] = 1
-        self.assertEqual(1, ti0.getv(5))
+        self.assertEqual(1, ti.getv(5))
 
-        ti0.parameters_zero()
+        ti.parameters_zero()
         params[2].data[2,1] = 1
-        self.assertEqual(1, ti0.getv(11))
+        self.assertEqual(1, ti.getv(11))
 
 
     def test_setv(self):
