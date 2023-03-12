@@ -1,4 +1,6 @@
-import torch, time, hashlib
+import torch
+import time
+import hashlib
 from torch import nn
 from enum import Enum
 from collections.abc import Iterable
@@ -27,69 +29,70 @@ class BaseIndvdl(nn.ModuleList):
         self.birthtime = birthtime
         self.eval:tuple = (None,)
         self.target_tensors = target_tensors
-
-    def freeze_module(self, module:nn.Module):
-        for parameter in list(module.parameters()):
-            parameter.requires_grad = False
         
+    def insert(self, index: int, module: nn.Module) -> None:
+        self.freeze_module(module)
+        return super().insert(index, module)
+    
     def append(self, module: nn.Module) -> 'ModuleList':
         self.freeze_module(module)
         return super().append(module)
 
-    def insert(self, index: int, module: nn.Module) -> None:
-        self.freeze_module(module)
-        return super().insert(index, module)
-
-    def extend(self, modules: Iterable[nn.Module]) -> 'ModuleList':
-        self.freeze_module(modules)
+    def extend(self, modules) -> 'ModuleList':
+        [self.freeze_module(module) for module in modules]
         return super().extend(modules)
 
-    def pop(self, index:int) -> 'Module':
-        pop_module = self[index]
-        del self[index]
-        return pop_module
-
     def parameters_zero(self):
-        for i, params in enumerate(self.parameters()):
+        for i, param in enumerate(self.parameters()):
             if self.target_tensors == "all":
-                params.zero_()
+                param.zero_()
             elif i in self.target_tensors:
-                params.zero_()
+                param.zero_()
+    
+    def freeze_module(self, module:nn.Module):
+        for param in module.parameters():
+            param.requires_grad = False
 
-    def get_len(self):
+    def count_params(self):
         """
         return count elements of model
         """
-        len = 0
-        for params in list(self.parameters()):
-            len += torch.tensor(params.shape).prod().item()
-        return len
+        count = 0
+        for param in self.parameters():
+            count += torch.tensor(param.shape).prod().item()
+        return count
 
-    def get_val(self,index):
-        if self.get_len()-1 < index or index < 0:
-            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.get_len()-1}")
-        count_params = 0
-        for params in self.parameters():
-            len_params = torch.tensor(params.data.shape).prod().item()
-            if index == 0 and count_params==0:
-                params_value = params.data.flatten()[index]
+    def getv(self,index):
+        if self.count_params()-1 < index or index < 0:
+            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.count_params()-1}")
+        count_param = -1
+        for param in self.parameters():
+            if index == 0:
+                params_value = param.data.flatten()[index]
                 return params_value.item()
-            count_params += len_params
-            if count_params > index:
-                index_params = index-count_params
-                params_value = params.data.flatten()[index_params-1]
-                return params_value.item()
+            len_param = torch.tensor(param.data.shape).prod().item()
+            count_param += len_param
+            if count_param >= index:
+                count_param -= len_param
+                for i, param_value in enumerate(param.data.flatten(), start=1):
+                    if count_param+i == index:
+                        return param_value
 
 
-    def set_val(self,index,val):
-        if self.get_len()-1 < index or index < 0:
-            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.get_len()-1}")
-        count_params = 0
-        for params in self.parameters():
-            len_params = torch.tensor(params.data.shape).prod().item()
-            count_params += len_params
-            if  count_params >= index:
-                index_params = index-count_params
-                params.data.flatten()[index_params-1] = val
+    def setv(self,index,val):
+        if self.count_params()-1 < index or index < 0:
+            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.count_params()-1}")
+        count_param = -1
+        for param in self.parameters():
+            if index == 0:
+                param.data.flatten()[index] = val
                 return True
-        raise IndexError(f"The value {val} is not assigned to index {index}.")
+            len_param = torch.tensor(param.data.shape).prod().item()
+            count_param += len_param
+            if count_param >= index:
+                count_param -= len_param
+                for i, _ in enumerate(param.data.flatten()):
+                    count_param+=1
+                    if count_param == index:
+                        param.data.flatten()[i] = val
+                        return True
