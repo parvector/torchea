@@ -6,14 +6,14 @@ Training and construction of torch models based on evolutionary algorithms
 # Introduction
 
 Нейронные сети имеют вид матрицы. Эти веса подбираются с помощью метода обратного распространения ошибки. Однако такая концепция имеет ряд ограничений:
-- Метод обратного распространения ошибки работает только с дифференцируемыми функциями активации.
+- Метод обратного распространения ошибки не обладает саморегулируемостью, т.е. не способен к самообучению.
 - Значения весов могут стремиться к нулю, но не когда не быть нулём. Это означает, что веса становятся шумами, которые мешают работе нейронной сети. 
 - Необходимость найти правильную архитектуру нейронной сети для решения задачи. Поиск правильной архитектуры подразумевает перебор огромного количества комбинаций и ограничен умственными способностями иженеров по машинному обучению.
 - Время прохода через нейронную сеть зависит от инженера. Инженер стремится усложнить модель, чтобы увеличить точность, но тогда увеличивается время прохода через нейронную сеть. Этот баланс очень сложно соблюсти прибегая лишь к умениям инженера.
 - Однокритериальное обучение. Модели нейронных сетей обучаются относительно одного критерия(функции ошибки), игнорируя другие необходимые критерии. При обучении инженеры используют метрики, но они позволяют лишь наблюдать за обучением, но не влияют на само обучение.
 
 Neural networks have the form of a matrix. These weights are selected using the backward error propagation method. However, this concept has a number of limitations:
-- The backward error propagation method works only with differentiable activation functions.
+- The method of reverse error propagation has no self-regulation, i.e., it is not capable of self-learning.
 - The values of the weights can tend to zero, but never to be zero. This means that the weights become noise that interferes with the neural network. 
 - The need to find the right neural network architecture to solve the problem. Finding the right architecture involves trying a huge number of combinations and is limited by the mental capacity of machine learning engineers.
 - The time to traverse the neural network is up to the engineer. The engineer tends to make the model more complex in order to increase accuracy, but then the time to traverse the neural network increases. This balance is very difficult to maintain using only the skills of the engineer.
@@ -57,7 +57,7 @@ pip3 install -e ".[dev]"
 pip3 install -r requirements.txt
 ```
 
-Instalation from PyPi
+Instalation from PyPi   
 ```
 pip3 install torchea
 ```
