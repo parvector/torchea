@@ -53,7 +53,7 @@ class BaseIndvdl(nn.ModuleList):
         for param in module.parameters():
             param.requires_grad = False
 
-    def count_params(self):
+    def count_ws(self):
         """
         return count elements of model
         """
@@ -63,36 +63,36 @@ class BaseIndvdl(nn.ModuleList):
         return count
 
     def getv(self,index):
-        if self.count_params()-1 < index or index < 0:
-            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.count_params()-1}")
-        count_param = -1
+        if self.count_ws()-1 < index or index < 0:
+            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.count_ws()-1}")
+        count_ws = -1
         for param in self.parameters():
             if index == 0:
                 params_value = param.data.flatten()[index]
                 return params_value.item()
-            len_param = torch.tensor(param.data.shape).prod().item()
-            count_param += len_param
-            if count_param >= index:
-                count_param -= len_param
+            len_ws = torch.tensor(param.data.shape).prod().item()
+            count_ws += len_ws
+            if count_ws >= index:
+                count_ws -= len_ws
                 for i, param_value in enumerate(param.data.flatten(), start=1):
-                    if count_param+i == index:
+                    if count_ws+i == index:
                         return param_value
 
 
     def setv(self,index,val):
-        if self.count_params()-1 < index or index < 0:
-            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.count_params()-1}")
-        count_param = -1
+        if self.count_ws()-1 < index or index < 0:
+            raise IndexError(f"IndexError: list index out of range. index must be >=0  and <= {self.count_ws()-1}")
+        count_ws = -1
         for param in self.parameters():
             if index == 0:
                 param.data.flatten()[index] = val
                 return True
-            len_param = torch.tensor(param.data.shape).prod().item()
-            count_param += len_param
-            if count_param >= index:
-                count_param -= len_param
+            len_ws = torch.tensor(param.data.shape).prod().item()
+            count_ws += len_ws
+            if count_ws >= index:
+                count_ws -= len_ws
                 for i, _ in enumerate(param.data.flatten()):
-                    count_param+=1
-                    if count_param == index:
+                    count_ws+=1
+                    if count_ws == index:
                         param.data.flatten()[i] = val
                         return True
