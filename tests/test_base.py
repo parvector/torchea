@@ -125,6 +125,82 @@ class TestBaseIndvdl(unittest.TestCase):
         self.assertEqual(1, ti.getv(11))
         ti.parameters_zero()
 
+    def test_lt(self):
+        ti0 = BaseIndvdl()
+        ti1 = BaseIndvdl()
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (1,0,0)
+        self.assertEqual(ti0 < ti1, False)
+
+        ti0.eval = (1,2,3)
+        ti1.eval = (2,3,4)
+        self.assertEqual(ti0 < ti1, True)
+
+    def test_le(self):
+        ti0 = BaseIndvdl()
+        ti1 = BaseIndvdl()
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (-1,0,0)
+        self.assertEqual(ti0 <= ti1, False)
+
+        ti0.eval = (1,2,3)
+        ti1.eval = (2,2,4)
+        self.assertEqual(ti0 <= ti1, True)
+
+    def test_ne(self):
+        ti0 = BaseIndvdl()
+        ti1 = BaseIndvdl()
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (1,1,1)
+        self.assertEqual(ti0 != ti1, True)
+
+        ti0.eval = (2,3,4)
+        ti1.eval = (2,3,4)
+        self.assertEqual(ti0 != ti1, False)
+
+    def test_ge(self):
+        ti0 = BaseIndvdl()
+        ti1 = BaseIndvdl()
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (-1,0,0)
+        self.assertEqual(ti1 >= ti0, False)
+
+        ti0.eval = (1,2,3)
+        ti1.eval = (2,2,4)
+        self.assertEqual(ti1 >= ti0, True)
+
+    def test_gt(self):
+        ti0 = BaseIndvdl()
+
+        ti1 = BaseIndvdl()
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (1,0,0)
+        self.assertEqual(ti0 > ti1, False)
+
+        ti0.eval = (1,2,3)
+        ti1.eval = (2,3,4)
+        self.assertEqual(ti1 > ti0, True)
+
+    """
+    def test_eq(self):
+        ti0 = BaseIndvdl()
+
+        ti1 = BaseIndvdl()
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (1,0,0)
+        self.assertEqual(ti0 == ti1, False)
+
+        ti0.eval = (1,2,3)
+        ti1.eval = (1,2,3)
+        self.assertEqual(ti1 == ti0, True)
+    """
+
 
 if __name__ == "__main__":    
     unittest.main()
