@@ -16,6 +16,6 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/parvector/torchea/issues",
     },
     packages=setuptools.find_packages(where="."),
-    install_requires = ["torch>=1.13.1", "typing_extensions>=4.5.0"],
+    install_requires = ["torch>=1.13.1", "typing_extensions>=4.5.0", "numpy>=1.24.2"],
     python_requires = ">=3.8.10"
 )
