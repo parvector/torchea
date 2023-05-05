@@ -3,6 +3,7 @@ import time
 import hashlib
 from torch import nn
 from enum import Enum
+from datetime import datetime
 from collections.abc import Iterable
 
 
@@ -14,10 +15,9 @@ class Task(Enum):
 
 
 class BaseIndvdl(nn.ModuleList):
-    def __init__(self, target_tensors="all", birthtime=time.time(), name=None) -> None:
+    def __init__(self, target_tensors="all", birthtime=datetime.now(), name=None) -> None:
         """
         Args:
-            target_tensors(list): The list of indexes of tensors on which evolutionary operations will be applied. If the list is "all", the operations will be performed on all tensors.
             birthtime(float): Time of birth. The default is time.time()
             name(None of string): Name of the individual. The default is sha256 from the time of birth.
         """
@@ -96,3 +96,53 @@ class BaseIndvdl(nn.ModuleList):
                     if count_ws == index:
                         param.data.flatten()[i] = val
                         return True
+                    
+    def __lt__(a, b):
+        for aitem, bitem in zip(a.eval,b.eval):
+            if aitem < bitem:
+                pass
+            else:
+                return False
+        return True
+    
+    def __le__(a,b):
+        for aitem, bitem in zip(a.eval,b.eval):
+            if aitem <= bitem:
+                pass
+            else:
+                return False
+        return True
+    
+    def __ne__(a,b):
+        for aitem, bitem in zip(a.eval,b.eval):
+            if aitem != bitem:
+                pass
+            else:
+                return False
+        return True
+    
+    def __ge__(a,b):
+        for aitem, bitem in zip(a.eval,b.eval):
+            if aitem >= bitem:
+                pass
+            else:
+                return False
+        return True
+    
+    def __gt__(a,b):
+        for aitem, bitem in zip(a.eval,b.eval):
+            if aitem > bitem:
+                pass
+            else:
+                return False
+        return True
+    
+    """
+    def __eq__(a,b):
+        for aitem, bitem in zip(a.eval,b.eval):
+            if aitem == bitem:
+                pass
+            else:
+                return False
+        return True
+    """
