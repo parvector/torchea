@@ -66,10 +66,10 @@ pip3 install -e ".[dev]"
 
 ### 1. Самый первый функционал
 
-- [ ] Реализовать функции для инициализации весов на основе функций [инициализации pytorch](https://pytorch.org/docs/stable/nn.init.html) и написать для них тесты.
+- [x] Реализовать функции для инициализации весов на основе функций [инициализации pytorch](https://pytorch.org/docs/stable/nn.init.html) и написать для них тесты.
 
 - [x] Реализовать функцию мутации из [файла](./docs/articles/Storn%2C%20Rainer%20and%20Price%2C%20Kenneth.%20Differential%20Evolution%20%E2%80%94%20A%20Simple%20and%20Efficient%20Heuristic%20for%20Global%20Optimization%20over%20Continuous%20Spaces.%20ournal%20of%20Global%20Optimization%2011%3A%20341%E2%80%93359%2C%201997..pdf) на странице 344 и тесты к этой функции.
 
 - [x] Реализовать функцию скрещивания из [файла](./docs/articles/Storn%2C%20Rainer%20and%20Price%2C%20Kenneth.%20Differential%20Evolution%20%E2%80%94%20A%20Simple%20and%20Efficient%20Heuristic%20for%20Global%20Optimization%20over%20Continuous%20Spaces.%20ournal%20of%20Global%20Optimization%2011%3A%20341%E2%80%93359%2C%201997..pdf) на странице 344 и тесты к этой функции.
 
-- [] Реализовать функцию отбора из [файла](./docs/articles/Storn%2C%20Rainer%20and%20Price%2C%20Kenneth.%20Differential%20Evolution%20%E2%80%94%20A%20Simple%20and%20Efficient%20Heuristic%20for%20Global%20Optimization%20over%20Continuous%20Spaces.%20ournal%20of%20Global%20Optimization%2011%3A%20341%E2%80%93359%2C%201997..pdf) на странице 345 и тесты к этой функции. Необходимо так же реализовать методы сравнения особей по значениям приспособленности. 
+- [] Реализовать методы сравнения особей по значениям приспособленности, функцию отбора из [файла](./docs/articles/Storn%2C%20Rainer%20and%20Price%2C%20Kenneth.%20Differential%20Evolution%20%E2%80%94%20A%20Simple%20and%20Efficient%20Heuristic%20for%20Global%20Optimization%20over%20Continuous%20Spaces.%20ournal%20of%20Global%20Optimization%2011%3A%20341%E2%80%93359%2C%201997..pdf) на странице 345 и тесты.
