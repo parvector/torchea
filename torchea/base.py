@@ -5,30 +5,26 @@ from torch import nn
 from enum import Enum
 from datetime import datetime
 from collections.abc import Iterable
+from functools import partial
 
-
-
-
-class Task(Enum):
-    Max = "MAX"
-    Min = "MIN"
 
 
 class BaseIndvdl(nn.ModuleList):
-    def __init__(self, target_tensors="all", birthtime=datetime.now(), name=None) -> None:
+    def __init__(self, target_tensors="all", birthtime=datetime.now(), name=None, *args, **kwargs) -> None:
         """
         Args:
             birthtime(float): Time of birth. The default is time.time()
             name(None of string): Name of the individual. The default is sha256 from the time of birth.
         """
         super(BaseIndvdl, self).__init__()
+        self.birthtime = birthtime
         if name == None:
-            self.name = hashlib.sha256(str(time).encode()).hexdigest()
+            self.name = hashlib.sha256(str(self.birthtime).encode()).hexdigest()
         else: 
             self.name = str(name)
-        self.birthtime = birthtime
         self.eval:tuple = (None,)
         self.target_tensors = target_tensors
+        
         
     def insert(self, index: int, module: nn.Module) -> None:
         self.freeze_module(module)
@@ -97,52 +93,90 @@ class BaseIndvdl(nn.ModuleList):
                         param.data.flatten()[i] = val
                         return True
                     
-    def __lt__(a, b):
-        for aitem, bitem in zip(a.eval,b.eval):
-            if aitem < bitem:
+    def __lt__(self, other):
+        for seval, oeval in zip(self.eval, other.eval):
+            if seval < oeval:
                 pass
             else:
                 return False
         return True
     
-    def __le__(a,b):
-        for aitem, bitem in zip(a.eval,b.eval):
-            if aitem <= bitem:
+    def __le__(self,other):
+        count_eq = 0
+        count_le = 0
+        for seval, oeval in zip(self.eval, other.eval):
+            if seval == oeval:
+                count_eq += 1
+            if seval <= oeval:
+                count_le += 1
+        if count_eq == len(self.eval) or count_eq < len(self.eval):
+            return False
+        elif count_le == len(self.eval):
+            return True
+
+    def __ne__(self, other):
+        for seval, oeval in zip(self.eval, other.eval):
+            if seval != oeval:
                 pass
             else:
                 return False
         return True
     
-    def __ne__(a,b):
-        for aitem, bitem in zip(a.eval,b.eval):
-            if aitem != bitem:
+    def __ge__(self, other):
+        count_eq = 0
+        count_ge = 0
+        for seval, oeval in zip(self.eval, other.eval):
+            if seval == oeval:
+                count_eq += 1
+            if seval >= oeval:
+                count_ge += 1
+        if count_eq == len(self.eval):
+            return False
+        elif count_ge == len(self.eval):
+            return True
+    
+    def __gt__(self, other):
+        for seval, oeval in zip(self.eval, other.eval):
+            if seval > oeval:
                 pass
             else:
                 return False
         return True
     
-    def __ge__(a,b):
-        for aitem, bitem in zip(a.eval,b.eval):
-            if aitem >= bitem:
+    def __eq__(self, other):
+        if any([ seval == None for seval in self.eval]) or \
+            any([ oeval == None for oeval in other.eval]):
+            raise TypeError("'==' is not supported if self.eval of instances have NoneType.")
+        
+        for seval, oeval in zip(self.eval,other.eval):
+            if seval == oeval:
                 pass
             else:
                 return False
         return True
+
+    def __hash__(self, *args, **kwargs):
+        return super().__hash__(*args, **kwargs)
     
-    def __gt__(a,b):
-        for aitem, bitem in zip(a.eval,b.eval):
-            if aitem > bitem:
-                pass
-            else:
-                return False
-        return True
-    
-    """
-    def __eq__(a,b):
-        for aitem, bitem in zip(a.eval,b.eval):
-            if aitem == bitem:
-                pass
-            else:
-                return False
-        return True
-    """
+    def eqid(self,other):
+        if id(self) == id(other):
+            return True
+        else:
+            return False
+        
+class BaseEA:
+    def __init__(self):
+        pass
+
+    def run(self, npop=10, ngen=10):
+        pass
+
+    def register(self, name, method, *args, **kargs):
+        pmethod = partial(method, *args, **kargs)
+        pmethod.__name__ = name
+        pmethod.__doc__ = method.__doc__
+
+        setattr(self, name, pmethod)
+
+    def unregister(self, name):
+        delattr(self, name)
