@@ -1,7 +1,8 @@
 import unittest
 import torch
 from torch import nn
-from torchea.base import BaseIndvdl
+from torchea.base import BaseIndvdl, BaseEA
+from torchea.deinits import uniform
 
 
 
@@ -146,8 +147,12 @@ class TestBaseIndvdl(unittest.TestCase):
         self.assertEqual(ti0 <= ti1, False)
 
         ti0.eval = (1,2,3)
-        ti1.eval = (2,2,4)
+        ti1.eval = (2,2,3)
         self.assertEqual(ti0 <= ti1, True)
+
+        ti0.eval = (0,0,0)
+        ti1.eval = (0,0,0)
+        self.assertEqual(ti0 <= ti1, False)
 
     def test_ne(self):
         ti0 = BaseIndvdl()
@@ -173,6 +178,10 @@ class TestBaseIndvdl(unittest.TestCase):
         ti1.eval = (2,2,4)
         self.assertEqual(ti1 >= ti0, True)
 
+        ti0.eval = (0,0,0)
+        ti1.eval = (0,0,0)
+        self.assertEqual(ti0 >= ti1, False)
+
     def test_gt(self):
         ti0 = BaseIndvdl()
 
@@ -186,11 +195,14 @@ class TestBaseIndvdl(unittest.TestCase):
         ti1.eval = (2,3,4)
         self.assertEqual(ti1 > ti0, True)
 
-    """
     def test_eq(self):
         ti0 = BaseIndvdl()
-
         ti1 = BaseIndvdl()
+
+        ti0.eval = (0,None,0)
+        ti1.eval = (0,0,0)
+        with self.assertRaises(TypeError):
+            ti1 == ti0
 
         ti0.eval = (0,0,0)
         ti1.eval = (1,0,0)
@@ -199,7 +211,28 @@ class TestBaseIndvdl(unittest.TestCase):
         ti0.eval = (1,2,3)
         ti1.eval = (1,2,3)
         self.assertEqual(ti1 == ti0, True)
-    """
+
+class TestBaseEA(unittest.TestCase):
+    def test_register(self):
+        ti = BaseIndvdl()
+        bea = BaseEA()
+
+        with self.assertRaises(AttributeError):
+            bea.init()
+        bea.register("init", uniform)
+        self.assertEqual(bea.init(model=ti), None)
+
+    def test_unregister(self):
+        ti = BaseIndvdl()
+        bea = BaseEA()
+
+        bea.register("init", uniform)
+        self.assertEqual(bea.init(model=ti), None)
+
+        bea.unregister("init")
+        with self.assertRaises(AttributeError):
+            bea.init()
+    
 
 
 if __name__ == "__main__":    
