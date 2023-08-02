@@ -4,7 +4,7 @@ from torch.distributions.uniform import Uniform
 
 
 
-def DE0(modelx, modelv, CR=0.1, 
+def de0(modelx, modelv, CR=0.1, 
             distribution=Uniform(torch.tensor([0.0]), torch.tensor([1.0]))):
     """
     Article: Storn, Rainer and Price, Kenneth. Differential Evolution — A Simple and Efficient Heuristic for Global Optimization over Continuous Spaces. ournal of Global Optimization 11: 341–359, 1997.

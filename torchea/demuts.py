@@ -3,7 +3,7 @@ import torch
 
 
 
-def DE0(model1, model2, model3, F):
+def de0(model1, model2, model3, F):
     """
     Article: Storn, Rainer & Price, Kenneth. (1995). Differential Evolution: A Simple and Efficient Adaptive Scheme for Global Optimization Over Continuous Spaces. Journal of Global Optimization. 23. 
     """ 
