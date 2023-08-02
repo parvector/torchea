@@ -1,13 +1,13 @@
 import unittest
 from torch import nn
 from torchea import deinits
-from torchea.base import BaseIndvdl, BaseEA
+from torchea.base import BaseIndvdL, BaseEA
 
 
 class TestDeinits(unittest.TestCase):
 
     def test_uniform(self):
-        ti = BaseIndvdl()
+        ti = BaseIndvdL()
         ti.append(nn.Linear(2,3))
         ti.parameters_zero()
         for params in ti.parameters():
@@ -20,7 +20,7 @@ class TestDeinits(unittest.TestCase):
             self.assertEqual( (params!=0).all(), True )
 
     def test_normal(self):
-        ti = BaseIndvdl()
+        ti = BaseIndvdL()
         ti.append(nn.Linear(2,3))
         ti.parameters_zero()
         for params in ti.parameters():
@@ -33,7 +33,7 @@ class TestDeinits(unittest.TestCase):
             self.assertEqual( (params!=0).all(), True )
 
     def test_constant(self):
-        ti = BaseIndvdl()
+        ti = BaseIndvdL()
         ti.append(nn.Linear(2,3))
         ti.parameters_zero()
         for params in ti.parameters():
@@ -46,7 +46,7 @@ class TestDeinits(unittest.TestCase):
             self.assertEqual( (params==2).all(), True )
 
     def test_ones(self):
-        ti = BaseIndvdl()
+        ti = BaseIndvdL()
         ti.append(nn.Linear(2,3))
 
         bea = BaseEA()
@@ -56,7 +56,7 @@ class TestDeinits(unittest.TestCase):
             self.assertEqual( (params==1).all(), True )
 
     def test_zeros(self):
-        ti = BaseIndvdl()
+        ti = BaseIndvdL()
         ti.append(nn.Linear(2,3))
 
         bea = BaseEA()
@@ -66,7 +66,7 @@ class TestDeinits(unittest.TestCase):
             self.assertEqual( (params==0).all(), True )
 
     def test_trunc_normal(self):
-        ti = BaseIndvdl()
+        ti = BaseIndvdL()
         ti.append(nn.Linear(2,3))
         ti.parameters_zero()
         for params in ti.parameters():

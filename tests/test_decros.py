@@ -2,27 +2,28 @@ import unittest
 from torchea import decros
 from torch import nn
 import torch
-from torchea.base import BaseIndvdl, BaseEA
+from torchea.base import BaseIndvdL, BaseEA
 
 
 
 class TestDecros(unittest.TestCase):
-    def test_DE0(self):
-        modelx = BaseIndvdl()
+    def test_de0(self):
+        modelx = BaseIndvdL()
         modelx.append(nn.Linear(4,2))
         modelx.parameters_zero()
 
-        modelv = BaseIndvdl()
+        modelv = BaseIndvdL()
         modelv.append(nn.Linear(4,2))
         modelv.parameters_zero()
         for params in modelv.parameters():
-            params += 1
+            params = params + 1
 
         bea = BaseEA()
-        bea.register("cros", decros.DE0)
+        bea.register("cros", decros.de0)
         modelu=bea.cros(modelx, modelv, CR=0)
         for params in modelu.parameters():
-            self.assertEqual((params.flatten()==0).all(), True)
+            print(params)
+            self.assertEqual((params.flatten()==0).all().item(), True)
         
         sum_ones = 0
         count_tests = 500
