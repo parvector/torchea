@@ -1,32 +1,40 @@
 import unittest
-from torchea.base import BaseIndvdL
+from torchea.base import BaseIndvdL, BaseEA
 from torchea import demuts
 from torch import nn
-
+import torch
 
 
 class TestDemuts(unittest.TestCase):
 
-    def test_DE0(self):
+    def test_mut0(self):
         ti1 = BaseIndvdL()
         ti1.append(nn.Linear(2,2))
+        ti1.setarget()
         ti1.parameters_zero()
-        for params in ti1.parameters():
-            params+=2
+        with torch.no_grad():
+            for params in ti1.parameters():
+                params+=2
 
         ti2 = BaseIndvdL()
         ti2.append(nn.Linear(2,2))
+        ti2.setarget()
         ti2.parameters_zero()
-        for params in ti2.parameters():
-            params+=2
+        with torch.no_grad():
+            for params in ti2.parameters():
+                params+=2
 
         ti3 = BaseIndvdL()
         ti3.append(nn.Linear(2,2))
+        ti3.setarget()
         ti3.parameters_zero()
-        for params in ti3.parameters():
-            params+=1
+        with torch.no_grad():
+            for params in ti3.parameters():
+                params+=1
 
-        #test mutDE0
-        mut_model = demuts.DE0(ti1, ti2, ti3, 2)   
+        #test mut0
+        tea = BaseEA(src_indvd=None)
+        tea.register('mut', demuts.mut0)
+        mut_model = tea.mut(ti1, ti2, ti3, 2)   
         for mutv in mut_model.parameters():
             self.assertTrue((mutv==4).all().item())
