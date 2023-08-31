@@ -3,26 +3,31 @@ from torch import nn
 
 
 def uniform(model,a=0.0, b=1.0):
-    for w in model.parameters():
-        nn.init.uniform_(w)
+    for param in model.parameters():
+        if param.target_torchea:
+            nn.init.uniform_(param, a, b)
 
 def normal(model, mean=0.0, std=1.0):
-    for w in model.parameters():
-        nn.init.normal_(w)
+    for param in model.parameters():
+        if param.target_torchea:
+            nn.init.normal_(param, mean=mean, std=std)
 
 def constant(model, val):
-    for w in model.parameters():
-        nn.init.constant_(w, val)
+    for param in model.parameters():
+        if param.target_torchea:
+            nn.init.constant_(param, val)
 
 def ones(model):
-    for w in model.parameters():
-        nn.init.ones_(w)
+    for param in model.parameters():
+        if param.target_torchea:
+            nn.init.ones_(param)
 
 def zeros(model):
-    for w in model.parameters():
-        nn.init.zeros_(w)
+    for param in model.parameters():
+        if param.target_torchea:
+            nn.init.zeros_(param)
 
-def trunc_normal(model, mean=0.0, std=1.0, a=-2.0, b=2.0):
+def trunc_normal(model, mean=0.0, std=1.0, a=-2, b=2):
     for w in model.parameters():
         nn.init.trunc_normal_(w, mean, std, a, b)
 
