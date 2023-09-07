@@ -1,5 +1,6 @@
 import unittest
-from torchea.base import BaseIndvd, BaseEA
+from torch import nn
+from torchea.base import IndvdL, BaseEA
 from torchea import desels
 
 
@@ -7,14 +8,16 @@ from torchea import desels
 
 class TestDESels(unittest.TestCase):
     def test_softsel(self):
-        ti0 = BaseIndvd()
+        ti0 = IndvdL(modules=[nn.Linear(2,3)])
+        ti0.setarget()
         ti0.eval = (0,0,0)
-        ti1 = BaseIndvd()
+        ti1 = IndvdL(modules=[nn.Linear(2,3)])
+        ti1.setarget()
         ti1.eval = (0,0,0)
 
-        bea = BaseEA(src_indvd=None)
+        bea = BaseEA(src_indvd=ti0)
         bea.register("softsel", desels.softsel)
-        selti = bea.softsel(ti0, ti1)
+        selti = bea.softsel(ti0, ti1, if_both_eq="first")
         self.assertEqual(selti == ti0, True)
 
         selti = bea.softsel(ti0, ti1, if_both_eq="second")
@@ -36,12 +39,14 @@ class TestDESels(unittest.TestCase):
         self.assertEqual(selti == ti1, True)
 
     def test_hardsel(self):
-        ti0 = BaseIndvd()
+        ti0 = IndvdL(modules=[nn.Linear(2,3)])
+        ti0.setarget()
         ti0.eval = (0,0,0)
-        ti1 = BaseIndvd()
+        ti1 = IndvdL(modules=[nn.Linear(2,3)])
+        ti1.setarget()
         ti1.eval = (0,0,0)
 
-        bea = BaseEA(src_indvd=None)
+        bea = BaseEA(src_indvd=ti1)
         bea.register("hardsel", desels.hardsel)
         selti = bea.hardsel(ti0, ti1)
         self.assertEqual(selti, False)

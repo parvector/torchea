@@ -124,7 +124,7 @@ class BaseIndvd:
         return copy_indvd 
 
 
-class BaseIndvdL(BaseIndvd, nn.ModuleList):
+class IndvdL(BaseIndvd, nn.ModuleList):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -176,7 +176,7 @@ class BaseIndvdL(BaseIndvd, nn.ModuleList):
                     param.target_torchea = False     
 
 
-class BaseIndvdD(BaseIndvd, nn.ModuleDict):
+class IndvdD(BaseIndvd, nn.ModuleDict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -233,7 +233,7 @@ class BaseIndvdD(BaseIndvd, nn.ModuleDict):
 
 class BaseEA(list):
     def __init__(self, src_indvd):
-        self.src_indvd = copy.deepcopy(src_indvd)
+        self.src_indvd = src_indvd.deepcopy()
 
     def gen_pop(self, npop:int):
         self.clear()
@@ -241,7 +241,7 @@ class BaseEA(list):
             self.append( self.src_indvd.deepcopy() )
 
     def run(self, npop:int=10, ngen:int=10):
-        self.gen_pop(npop=npop)
+        pass
 
     def register(self, name, method, *args, **kargs):
         pmethod = partial(method, *args, **kargs)

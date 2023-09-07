@@ -1,7 +1,7 @@
 import unittest
 import torch
 from torch import nn
-from torchea.base import BaseIndvd, BaseIndvdL, BaseIndvdD, BaseEA
+from torchea.base import BaseIndvd, IndvdL, IndvdD, BaseEA
 from torchea.deinits import uniform
 from datetime import datetime
 import numpy as np
@@ -15,7 +15,7 @@ class TestBaseIndvd(unittest.TestCase):
         self.assertEqual(type(ti.name), str)
 
     def test_deepcopy(self):
-        ti0 = BaseIndvdL()
+        ti0 = IndvdL()
         ti0.append(nn.Linear(2,2))
         ti0.append(nn.Linear(2,3))
         ti0.append(nn.Linear(3,2))
@@ -28,15 +28,15 @@ class TestBaseIndvd(unittest.TestCase):
         for ti0param, ti1param in zip(ti0.parameters(), ti1.parameters()):
             self.assertEqual(ti0param.target_torchea, ti1param.target_torchea)
 
-class TestBaseIndvdL(unittest.TestCase):
+class TestIndvdL(unittest.TestCase):
     def test_init(self):
-        ti = BaseIndvdL(modules=[nn.Linear(2,3), nn.Linear(3,4)])
+        ti = IndvdL(modules=[nn.Linear(2,3), nn.Linear(3,4)])
         self.assertEqual(len(ti), 2)
         self.assertEqual(type(ti.birthtime), datetime)
         self.assertEqual(type(ti.name), str)
 
     def test_setarget(self):
-        til = BaseIndvdL()
+        til = IndvdL()
         til.append(nn.Linear(2,2))
         til.append(nn.Linear(2,3))
         til.append(nn.Linear(3,2))
@@ -50,7 +50,7 @@ class TestBaseIndvdL(unittest.TestCase):
                     self.assertEqual(param.target_torchea, False)
 
 
-        til = BaseIndvdL()
+        til = IndvdL()
         til.append(nn.Linear(2,2))
         til.append(nn.Linear(2,3))
         til.append(nn.Linear(3,2))
@@ -63,7 +63,7 @@ class TestBaseIndvdL(unittest.TestCase):
                 self.assertEqual(param.target_torchea, False)
 
 
-        til = BaseIndvdL()
+        til = IndvdL()
         til.append(nn.Linear(2,2))
         til.append(nn.Linear(2,3))
         til.append(nn.Linear(3,2))
@@ -73,7 +73,7 @@ class TestBaseIndvdL(unittest.TestCase):
             self.assertEqual(param.target_torchea, True)
 
     def test_untarget(self):
-        til = BaseIndvdL()
+        til = IndvdL()
         til.append(nn.Linear(2,2))
         til.append(nn.Linear(2,3))
         til.append(nn.Linear(3,2))
@@ -88,7 +88,7 @@ class TestBaseIndvdL(unittest.TestCase):
                     self.assertEqual(param.target_torchea, True)
 
 
-        til = BaseIndvdL()
+        til = IndvdL()
         til.append(nn.Linear(2,2))
         til.append(nn.Linear(2,3))
         til.append(nn.Linear(3,2))
@@ -102,7 +102,7 @@ class TestBaseIndvdL(unittest.TestCase):
                 self.assertEqual(param.requires_grad, True)
 
 
-        til = BaseIndvdL()
+        til = IndvdL()
         til.append(nn.Linear(2,2))
         til.append(nn.Linear(2,3))
         til.append(nn.Linear(3,2))
@@ -113,13 +113,13 @@ class TestBaseIndvdL(unittest.TestCase):
             self.assertEqual(param.target_torchea, False)
 
     def test_parameters_zero(self):
-        ti = BaseIndvdL(modules=[nn.Linear(2,2), nn.Linear(2,3), nn.Linear(3,2)])
+        ti = IndvdL(modules=[nn.Linear(2,2), nn.Linear(2,3), nn.Linear(3,2)])
 
         ti.setarget()
         for param in ti.parameters():
             self.assertEqual((param==0).all(), 0)
 
-        ti = BaseIndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
+        ti = IndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
         ti.untarget(mkeys=["0", "2"])
         for mk, module in ti.items():
             if mk in ["0", "2"]:
@@ -130,7 +130,7 @@ class TestBaseIndvdL(unittest.TestCase):
                     self.assertEqual((param!=0).all(),True)
 
     def test_count_ws(self):
-        ti = BaseIndvdL(modules=[nn.Linear(2,2), nn.Linear(2,3), nn.Linear(3,2)])
+        ti = IndvdL(modules=[nn.Linear(2,2), nn.Linear(2,3), nn.Linear(3,2)])
         ti.setarget()
 
         self.assertEqual(23, ti.count_ws())
@@ -141,7 +141,7 @@ class TestBaseIndvdL(unittest.TestCase):
         self.assertEqual(23, ti.count_ws(only_targets=False))
 
     def test_getv(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         ti.append(nn.Linear(2,2))
         ti.append(nn.Linear(2,3))
 
@@ -236,7 +236,7 @@ class TestBaseIndvdL(unittest.TestCase):
 
 
     def test_setv(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         ti.append(nn.Linear(2,2))
         ti.append(nn.Linear(2,3))
         ti.setarget()
@@ -322,16 +322,16 @@ class TestBaseIndvdL(unittest.TestCase):
         self.assertEqual(2, ti.getv(7))
 
 
-class TestBaseIndvdD(unittest.TestCase):
+class TestIndvdD(unittest.TestCase):
     def test_init(self):
-        ti = BaseIndvdD(modules={"1":nn.Linear(2,3), "2":nn.Linear(3,4)})
+        ti = IndvdD(modules={"1":nn.Linear(2,3), "2":nn.Linear(3,4)})
 
         self.assertEqual(len(ti.items()), 2)
         self.assertEqual(type(ti.birthtime), datetime)
         self.assertEqual(type(ti.name), str)
 
     def test_setarget(self):
-        til = BaseIndvdD(modules={"1":nn.Linear(2,2), 
+        til = IndvdD(modules={"1":nn.Linear(2,2), 
                                   "2":nn.Linear(2,3), 
                                   "3":nn.Linear(3,2)})
 
@@ -344,7 +344,7 @@ class TestBaseIndvdD(unittest.TestCase):
                     self.assertEqual(param.target_torchea, False)
 
 
-        til = BaseIndvdD(modules={"1":nn.Linear(2,2), 
+        til = IndvdD(modules={"1":nn.Linear(2,2), 
                                   "2":nn.Linear(2,3), 
                                   "3":nn.Linear(3,2)})
 
@@ -356,7 +356,7 @@ class TestBaseIndvdD(unittest.TestCase):
                 self.assertEqual(param.target_torchea, False)
 
 
-        til = BaseIndvdD(modules={"1":nn.Linear(2,2), 
+        til = IndvdD(modules={"1":nn.Linear(2,2), 
                                   "2":nn.Linear(2,3), 
                                   "3":nn.Linear(3,2)})
 
@@ -365,7 +365,7 @@ class TestBaseIndvdD(unittest.TestCase):
             self.assertEqual(param.target_torchea, True)
 
     def test_untarget(self):
-        tid = BaseIndvdD(modules={"1":nn.Linear(2,2), 
+        tid = IndvdD(modules={"1":nn.Linear(2,2), 
                                   "2":nn.Linear(2,3), 
                                   "3":nn.Linear(3,2)})
 
@@ -379,7 +379,7 @@ class TestBaseIndvdD(unittest.TestCase):
                     self.assertEqual(param.target_torchea, True)
 
 
-        tid = BaseIndvdD(modules={"1":nn.Linear(2,2), 
+        tid = IndvdD(modules={"1":nn.Linear(2,2), 
                                   "2":nn.Linear(2,3), 
                                   "3":nn.Linear(3,2)})
 
@@ -392,7 +392,7 @@ class TestBaseIndvdD(unittest.TestCase):
                 self.assertEqual(param.target_torchea, True)
 
 
-        tid = BaseIndvdD(modules={"1":nn.Linear(2,2), 
+        tid = IndvdD(modules={"1":nn.Linear(2,2), 
                                   "2":nn.Linear(2,3), 
                                   "3":nn.Linear(3,2)})
 
@@ -402,13 +402,13 @@ class TestBaseIndvdD(unittest.TestCase):
             self.assertEqual(param.target_torchea, False)
 
     def test_parameters_zero(self):
-        ti = BaseIndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
+        ti = IndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
 
         ti.setarget()
         for param in ti.parameters():
             self.assertEqual((param==0).all(), 0)
 
-        ti = BaseIndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
+        ti = IndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
         ti.untarget(mkeys=["0", "2"])
         for mk, module in ti.items():
             if mk in ["0", "2"]:
@@ -419,7 +419,7 @@ class TestBaseIndvdD(unittest.TestCase):
                     self.assertEqual((param!=0).all(),True)
 
     def test_count_ws(self):
-        ti = BaseIndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
+        ti = IndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
         ti.setarget()
 
         self.assertEqual(23, ti.count_ws())
@@ -432,7 +432,7 @@ class TestBaseIndvdD(unittest.TestCase):
 
 
     def test_getv(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         ti.append(nn.Linear(2,2))
         ti.append(nn.Linear(2,3))
 
@@ -527,7 +527,7 @@ class TestBaseIndvdD(unittest.TestCase):
 
 
     def test_setv(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         ti.append(nn.Linear(2,2))
         ti.append(nn.Linear(2,3))
         ti.setarget()
@@ -616,29 +616,33 @@ class TestBaseIndvdD(unittest.TestCase):
 class TestBaseEA(unittest.TestCase):
 
     def test_init(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
 
         with self.assertRaises(TypeError):
             bea = BaseEA()
         bea = BaseEA(src_indvd=ti)
 
     def test_gen_pop(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         ti.append(nn.Linear(4,2))
+        ti.setarget()
+
         bea = BaseEA(src_indvd=ti)
         bea.gen_pop(npop=10)
         idxs = [id(p) for p in bea]
         self.assertEqual(len(np.unique(idxs)), 10)
 
-        ti = BaseIndvdD()
+        ti = IndvdD()
         ti.update({"1":nn.Linear(4,2)})
+        ti.setarget()
+
         bea = BaseEA(src_indvd=ti)
         bea.gen_pop(npop=10)
         idxs = [id(p) for p in bea]
         self.assertEqual(len(np.unique(idxs)), 10)
 
     def test_register(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         bea = BaseEA(src_indvd=ti)
 
         with self.assertRaises(AttributeError):
@@ -647,7 +651,7 @@ class TestBaseEA(unittest.TestCase):
         self.assertEqual(bea.init(model=ti), None)
 
     def test_unregister(self):
-        ti = BaseIndvdL()
+        ti = IndvdL()
         bea = BaseEA(src_indvd=ti)
 
         bea.register("init", uniform)
