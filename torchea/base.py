@@ -18,7 +18,7 @@ class BaseIndvd:
         """
         self.birthtime = birthtime
         self.name = hashlib.sha256(str(self.birthtime).encode()).hexdigest()
-        self.eval:tuple = (None,)
+        self.fitnes:tuple = (None,)
 
     def parameters_zero(self, only_targets:bool=True):
         for param in self.parameters():
@@ -126,7 +126,7 @@ class BaseIndvd:
 
 class IndvdL(BaseIndvd, nn.ModuleList):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(IndvdL, self).__init__(*args, **kwargs)
 
     def setarget(self, mindxs:Union[str,list, None]="all", tindxs:Union[str,list, None]=None):
         """
@@ -173,12 +173,12 @@ class IndvdL(BaseIndvd, nn.ModuleList):
         if type(tindxs) == list:
             for ti, param in enumerate(self.parameters()):
                 if ti in tindxs:
-                    param.target_torchea = False     
+                    param.target_torchea = False                    
 
 
 class IndvdD(BaseIndvd, nn.ModuleDict):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(IndvdD, self).__init__(*args, **kwargs)
 
     def setarget(self, mkeys:Union[str,list, None]="all", tindxs:Union[str,list, None]=None):
         """
