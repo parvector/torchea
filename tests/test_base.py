@@ -19,12 +19,12 @@ class TestBaseIndvd(unittest.TestCase):
         ti0.append(nn.Linear(2,2))
         ti0.append(nn.Linear(2,3))
         ti0.append(nn.Linear(3,2))
-        ti0.eval = (None, 1, 2)
+        ti0.fitnes = (None, 1, 2)
         ti0.setarget()
 
         ti1 = ti0.deepcopy()
         self.assertEqual( id(ti0) != id(ti1), True)
-        self.assertEqual( all([ ti0eval == ti1eval for ti0eval, ti1eval in zip(ti0.eval, ti1.eval)]), True)
+        self.assertEqual( all([ ti0fitnes == ti1fitnes for ti0fitnes, ti1fitnes in zip(ti0.fitnes, ti1.fitnes)]), True)
         for ti0param, ti1param in zip(ti0.parameters(), ti1.parameters()):
             self.assertEqual(ti0param.target_torchea, ti1param.target_torchea)
 
@@ -113,7 +113,7 @@ class TestIndvdL(unittest.TestCase):
             self.assertEqual(param.target_torchea, False)
 
     def test_parameters_zero(self):
-        ti = IndvdL(modules=[nn.Linear(2,2), nn.Linear(2,3), nn.Linear(3,2)])
+        ti = IndvdD(modules={"0":nn.Linear(2,2), "1":nn.Linear(2,3), "2":nn.Linear(3,2)})
 
         ti.setarget()
         for param in ti.parameters():
@@ -144,7 +144,6 @@ class TestIndvdL(unittest.TestCase):
         ti = IndvdL()
         ti.append(nn.Linear(2,2))
         ti.append(nn.Linear(2,3))
-
         ti.setarget()
         ti.parameters_zero()
 
