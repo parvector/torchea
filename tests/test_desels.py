@@ -10,10 +10,10 @@ class TestDESels(unittest.TestCase):
     def test_softsel(self):
         ti0 = IndvdL(modules=[nn.Linear(2,3)])
         ti0.setarget()
-        ti0.eval = (0,0,0)
+        ti0.fitnes = (0,0,0)
         ti1 = IndvdL(modules=[nn.Linear(2,3)])
         ti1.setarget()
-        ti1.eval = (0,0,0)
+        ti1.fitnes = (0,0,0)
 
         bea = BaseEA(src_indvd=ti0)
         bea.register("softsel", desels.softsel)
@@ -28,23 +28,23 @@ class TestDESels(unittest.TestCase):
         self.assertEqual(selti[1] == ti1, True)
 
 
-        ti0.eval = (0,0,1)
-        ti1.eval = (0,0,0)
+        ti0.fitnes = (0,0,1)
+        ti1.fitnes = (0,0,0)
         selti = bea.softsel(ti0, ti1)
         self.assertEqual(selti == ti0, True)
 
-        ti0.eval = (0,0,0)
-        ti1.eval = (0,0,1)
+        ti0.fitnes = (0,0,0)
+        ti1.fitnes = (0,0,1)
         selti = bea.softsel(ti0, ti1)
         self.assertEqual(selti == ti1, True)
 
     def test_hardsel(self):
         ti0 = IndvdL(modules=[nn.Linear(2,3)])
         ti0.setarget()
-        ti0.eval = (0,0,0)
+        ti0.fitnes = (0,0,0)
         ti1 = IndvdL(modules=[nn.Linear(2,3)])
         ti1.setarget()
-        ti1.eval = (0,0,0)
+        ti1.fitnes = (0,0,0)
 
         bea = BaseEA(src_indvd=ti1)
         bea.register("hardsel", desels.hardsel)
@@ -52,13 +52,13 @@ class TestDESels(unittest.TestCase):
         self.assertEqual(selti, False)
 
 
-        ti0.eval = (1,2,3)
-        ti1.eval = (2,3,4)
+        ti0.fitnes = (1,2,3)
+        ti1.fitnes = (2,3,4)
         selti = bea.hardsel(ti0, ti1)
         self.assertEqual(ti1 == selti, True)
 
-        ti0.eval = (2,3,4)
-        ti1.eval = (1,2,3)
+        ti0.fitnes = (2,3,4)
+        ti1.fitnes = (1,2,3)
         selti = bea.hardsel(ti0, ti1)
         self.assertEqual(ti0 == selti, True)
 
